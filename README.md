@@ -2,4 +2,4 @@
 
 A game of Wheel of Fortune, programmed in Python.
 
-Simply download and run the Jupyter notebook. The program will create a .JSON file in the directory in which you run the notebook.
+Simply download and run the Jupyter notebook or .py file. Note that the program will create a .JSON file in the working directory. 
