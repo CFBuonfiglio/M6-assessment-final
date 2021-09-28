@@ -64,6 +64,26 @@ def ask_vowel(): #Ensures that the guess is a vowel
         g = input("Please enter a vowel. ").upper()
     return g
 
+import random
+
+def new_word():
+    #Select random word & its hint
+    randomness = random.randint(0, len(wordlist) - 1) 
+
+    target = wordlist[randomness]["word"]
+    hint = wordlist[randomness]["hint"]
+    
+    return [target, hint]
+
+def new_board():
+    #Build the word's "board"
+    blank = [] 
+
+    for ltr in target: 
+        blank.append('_')
+        
+    return blank
+
 
 # # Game
 
@@ -74,19 +94,6 @@ def ask_vowel(): #Ensures that the guess is a vowel
 file = open('words.json') 
 words = file.read() 
 wordlist = json.loads(words) 
-
-#Select random word & its hint
-import random
-randomness = random.randint(0, len(wordlist) - 1)
-
-target = wordlist[randomness]["word"]
-hint = wordlist[randomness]["hint"]
-
-#Build the word's "board"
-blank = [] 
-
-for ltr in target: 
-    blank.append('_') 
 
 #Create the wheel
 wheel = list(range(100, 1000, 50))
@@ -119,6 +126,10 @@ gameover = False
 print("Welcome to...\nWheel! Of! Fortune!")
 
 while gameover is False:
+    temp = new_word()
+    target = temp[0]
+    hint = temp[1]
+    blank = new_board()
     while currentround != 3:
         print("\n===================================")
         print(f"Round {currentround}")
@@ -198,12 +209,19 @@ while gameover is False:
             else:
                 if guess == target:
                     print(f"\nThe word was {target}!")
-                    print(f"Player {activeplayer + 1} wins!")
-                    wallet[activeplayer] += 50000
-                    print(f"Your total winnings are: ${wallet[activeplayer]}")
-                    print("\nSee you next time on...\nWheel! Of! Fortune!")
-                    gameover = True
-                    break
+                    print(f"Good guess! You added ${landedon} to your total winnings!\n")
+                    wallet[activeplayer] += landedon
+                    if activeplayer == 2:
+                        print("On to the next round!")
+                        currentround += 1
+                        activeplayer = 0
+                    else:
+                        print(f"Pass the keyboard to Player {activeplayer + 2}")
+                        activeplayer += 1
+                    temp = new_word()
+                    target = temp[0]
+                    hint = temp[1]
+                    blank = new_board()
                 else: #Guessed the word incorrectly
                     print("\nSorry, that wasn't the word!")
                     if activeplayer == 2:
